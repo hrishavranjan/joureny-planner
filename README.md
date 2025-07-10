@@ -55,7 +55,7 @@ hrishavranjan2003@gmail.com
 ▪📽 Media support: images, audio, and videos
 
 📁 Project Structure
-
+```
 journey-planner/
 │
 ├── public/
@@ -71,7 +71,7 @@ journey-planner/
 │   ├── css/                      # All custom styles
 │   └── firebase.js               # Firebase setup
 └── README.md
-
+```
 
 🧠 Tech Stack
 
