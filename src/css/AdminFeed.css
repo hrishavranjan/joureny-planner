@@ -1,0 +1,156 @@
+.admin-feed-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  color: white;
+  background-color: #111;
+  border-radius: 10px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.admin-feed-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+  color: #00ffd5;
+  border-bottom: 1px solid #222;
+  padding-bottom: 10px;
+}
+
+.post-card {
+  background-color: #1e1e1e;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 12px;
+  border: 1px solid #2d2d2d;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-3px);
+}
+
+.post-card h3 {
+  font-size: 22px;
+  margin-bottom: 8px;
+  color: #ffd700;
+}
+
+.post-card p {
+  margin: 6px 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.post-card small {
+  color: #999;
+  font-size: 13px;
+}
+
+.post-card img,
+.post-card video {
+  display: block;
+  margin-top: 12px;
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.post-card audio {
+  margin-top: 12px;
+  width: 100%;
+}
+
+.post-card button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.post-card button:hover {
+  background-color: #1e7e34;
+}
+
+.post-card input[type='text'] {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background-color: #252525;
+  color: white;
+  font-size: 15px;
+}
+
+.post-card input::placeholder {
+  color: #aaa;
+}
+
+/* Comments Section */
+.comment-count {
+  font-size: 13px;
+  color: #ccc;
+  margin-left: 10px;
+}
+
+.comment-toggle-btn {
+  margin-left: 10px;
+  background-color: #333;
+  color: #ddd;
+  padding: 6px 10px;
+  font-size: 13px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.comment-toggle-btn:hover {
+  background-color: #444;
+}
+
+.comment-container {
+  margin-top: 12px;
+}
+
+.comment-box {
+  padding: 10px 14px;
+  background-color: #202020;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  color: #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 14px;
+}
+
+.comment-box strong {
+  color: #0cf;
+}
+
+.comment-time {
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.delete-comment-btn {
+  background-color: transparent;
+  color: #f87171;
+  border: none;
+  font-size: 13px;
+  padding: 6px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.delete-comment-btn:hover {
+  background-color: #4c0000;
+  color: white;
+}

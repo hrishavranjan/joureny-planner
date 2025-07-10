@@ -1,0 +1,93 @@
+/* Modal container */
+.modal {
+  background: #1e1e2f;
+  color: white;
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 600px;
+  margin: auto;
+  outline: none;
+  font-family: 'Segoe UI', sans-serif;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Overlay background */
+.overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Inputs and textareas */
+.modal input,
+.modal select,
+.modal textarea {
+  width: 100%;
+  margin: 6px 0 16px;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #2c2c3a;
+  color: white;
+}
+
+.modal textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Buttons */
+.modal button {
+  padding: 8px 14px;
+  margin-top: 10px;
+  background: linear-gradient(to right, #ff416c, #ff4b2b);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.modal button:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+/* Inline item blocks */
+.modal div > button {
+  background: #444;
+  margin-left: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.modal hr {
+  border-color: #333;
+  margin: 20px 0 10px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .modal {
+    padding: 1rem;
+    width: 90%;
+  }
+}
+
+/* Smooth fade-in animation */
+@keyframes fadeIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

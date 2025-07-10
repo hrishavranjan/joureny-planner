@@ -1,0 +1,342 @@
+/* 🌍 Global Reset & Theme */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+  color: #fff;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+/* 🧭 Main Navigation Styling */
+.main-navbar,
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #111;
+  padding: 1rem 2rem;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+}
+
+/* 👈 Left */
+.nav-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* 🏁 Center */
+.nav-center {
+  flex: 1;
+  text-align: center;
+}
+
+.nav-center a {
+  color: white;
+  text-decoration: none;
+  margin: 0 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.nav-center a:hover {
+  color: #ff6b6b;
+  transform: scale(1.05);
+}
+
+/* 👉 Right */
+.nav-right {
+  flex: 1;
+  text-align: right;
+}
+
+/* 🔰 Logo and Branding */
+.logo {
+  height: 40px;
+  margin-right: 0.5rem;
+}
+
+.logo-name {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.site-name {
+  font-size: 1.3rem;
+  color: white;
+  font-family: 'Courier New', monospace;
+}
+
+/* 🔐 Login Button or Others */
+.login-link {
+  background: linear-gradient(to right, orange, purple);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.4s ease;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* 🔽 Profile Dropdown Menu */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  padding-left: 0;
+}
+
+.nav-links li {
+  position: relative;
+}
+
+.profile-dropdown {
+  cursor: pointer;
+  position: relative;
+}
+
+/* Hide dropdown by default */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 2.5rem;
+  right: 0;
+  background-color: #111;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0.5rem;
+  min-width: 180px;
+  z-index: 999;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* ✅ Show dropdown when class 'show' is applied */
+.profile-dropdown .dropdown-content.show {
+  display: block;
+}
+
+.dropdown-content li {
+  margin: 0.5rem 0;
+}
+
+.dropdown-content a,
+.dropdown-content button {
+  color: white;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.4rem;
+  width: 100%;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover,
+.dropdown-content button:hover {
+  background-color: #222;
+}
+
+.logout-btn {
+  color: red;
+}
+
+/* 📱 Responsive Styles */
+@media (max-width: 768px) {
+  .navbar,
+  .main-navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    flex: unset;
+    width: 100%;
+    text-align: left;
+    margin-top: 0.5rem;
+  }
+
+  .nav-center {
+    order: 2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-left {
+    order: 1;
+  }
+
+  .nav-right {
+    order: 3;
+    text-align: left;
+  }
+
+  .nav-center a,
+  .dropdown-content a,
+  .dropdown-content button {
+    display: block;
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+
+  .dropdown-content {
+    position: relative;
+    top: 0;
+    right: auto;
+    left: 0;
+    margin-top: 0.5rem;
+  }
+
+  .logo {
+    height: 35px;
+  }
+
+  .site-name {
+    font-size: 1.1rem;
+  }
+}
+
+/* 🍔 Hamburger Menu */
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+  }
+
+  .nav-menu {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: #111;
+    margin-top: 1rem;
+  }
+
+  .nav-menu.open {
+    display: flex;
+  }
+}
+
+/* 🔁 Smooth Fade Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ✍️ Highlighted Admin Create Post Link */
+.admin-create-post-link {
+  color: #00ffcc;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.admin-create-post-link:hover {
+  color: #00ffd5;
+  transform: scale(1.08);
+  text-shadow: 0 0 6px rgba(0, 255, 204, 0.8);
+}
+
+/* 🔳 Modal Overlay & Box (Logout/Reset) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-box {
+  background-color: #111;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0, 255, 204, 0.3);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  animation: slideUp 0.4s ease-in-out;
+}
+
+.modal-box p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* 🟢 Confirm / 🔴 Cancel Buttons */
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.modal-buttons .confirm,
+.modal-buttons .cancel {
+  padding: 0.6rem 1.3rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-buttons .confirm {
+  background-color: #4caf50;
+  color: white;
+}
+
+.modal-buttons .cancel {
+  background-color: #ff4444;
+  color: white;
+}
+
+.modal-buttons .confirm:hover {
+  background-color: #3e9142;
+}
+
+.modal-buttons .cancel:hover {
+  background-color: #cc0000;
+}
+
+/* 🧊 Animation */
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
