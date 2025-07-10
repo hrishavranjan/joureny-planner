@@ -82,7 +82,7 @@ journey-planner/
 
 
 🎨 UI Previews
-![WhatsApp Image 2025-07-10 at 23 20 34_d70bdcfe](https://github.com/user-attachments/assets/3f5e51af-24ec-4c1f-86e8-75223b617b85)
+Login Page 
 
 ▪💡 Future Enhancements
 ▪⏳ Multi-day trip plans with calendars
