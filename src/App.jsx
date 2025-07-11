@@ -6,6 +6,7 @@ import {
   useLocation,
   Navigate,
 } from 'react-router-dom';
+
 import { UserContext } from './context/UserContext';
 
 import NavigationBar from './components/NavigationBar';
@@ -27,7 +28,6 @@ import AdminPanel from './components/AdminPanel';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// ✅ Split AppContent to separate logic, including loading fallback
 const AppContent = () => {
   const { user, loading } = useContext(UserContext);
   const location = useLocation();
@@ -44,12 +44,18 @@ const AppContent = () => {
 
   return (
     <>
+      {/* Conditional Navigation Bar */}
       {!hideNavPaths.includes(location.pathname) &&
         (user ? <NavigationBar /> : <Navbar />)}
 
       <Routes>
+        {/* ✅ Root redirects to /admin-feed if logged in */}
+        <Route
+          path="/"
+          element={user ? <Navigate to="/admin-feed" replace /> : <Home />}
+        />
+
         {/* Public Routes */}
-        <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<FAQ />} />
@@ -109,16 +115,17 @@ const AppContent = () => {
           }
         />
 
-        {/* ✅ Fallback route for undefined paths */}
+        {/* ✅ Wildcard: redirect unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
-      <ToastContainer position="bottom-right" />
+      {/* Toast notifications */}
+      <ToastContainer position="bottom-right" autoClose={6000} />
     </>
   );
 };
 
-// ✅ Wrap AppContent inside <Router>
+// ✅ Wrap AppContent in Router
 const App = () => (
   <Router>
     <AppContent />
