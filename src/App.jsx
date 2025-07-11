@@ -108,6 +108,9 @@ const AppContent = () => {
             )
           }
         />
+
+        {/* ✅ Fallback route for undefined paths */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
       <ToastContainer position="bottom-right" />
