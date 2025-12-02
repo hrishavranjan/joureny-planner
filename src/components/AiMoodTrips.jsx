@@ -8,6 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 const BRAND_NAME = 'Journey-Planner';
 const BRAND_EMAIL = 'hrishavranjan2003@gmail.com';
 
+const API_BASE = 'https://journey-planner-backend.onrender.com';
+
 // World country list
 const WORLD_COUNTRIES = [
   'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola',
@@ -223,7 +225,7 @@ const AiMoodTrips = () => {
     travelers,
     existing = []
   }) => {
-    const url = 'http://localhost:4000/api/gemini-recommendations';
+    const url = `${API_BASE}/api/gemini-recommendations`;
     const resp = await axios.post(url, {
       mood,
       country,
@@ -447,7 +449,7 @@ const AiMoodTrips = () => {
               .map((x) => x.destination)
               .filter(Boolean);
             const pricingResp = await axios.post(
-              'http://localhost:4000/api/live-pricing-batch',
+              `${API_BASE}/api/live-pricing-batch`,
               {
                 destinations,
                 travelers,
@@ -483,7 +485,7 @@ const AiMoodTrips = () => {
         }
       } catch (err) {
         console.error('Gemini backend call failed:', err);
-        toast.error('⚠️ AI suggestions failed. Showing local results only.', {
+        toast.error('⚠️ AI suggestions failed. Showing Our Official Database.', {
           position: 'top-center',
           autoClose: 5000
         });
@@ -676,8 +678,6 @@ const AiMoodTrips = () => {
 
         <div className="form-group">
           <label>Select Country:</label>
-
-          
 
           <select
             name="country"
@@ -937,8 +937,8 @@ const AiMoodTrips = () => {
           })}
 
           <button onClick={handleShowMore}>
-  🔁 Show more results
-</button>
+            🔁 Show more results
+          </button>
 
         </div>
       )}
