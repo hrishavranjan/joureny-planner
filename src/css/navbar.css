@@ -1,69 +1,108 @@
+/* ===== BASE ===== */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #111;
   padding: 1rem 2rem;
-  flex-wrap: wrap;
   position: relative;
-}
-
-.nav-left {
-  flex: 1;
-  display: flex;
-  align-items: center;
+  z-index: 1000;
 }
 
 .nav-center {
-  flex: 1;
-  text-align: center;
+  display: flex;
+  gap: 1rem;
 }
 
 .nav-center a {
   color: white;
   text-decoration: none;
-  margin: 0 1rem;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
 .nav-center a:hover {
   color: #ff6b6b;
 }
 
+/* LOGIN ALWAYS RIGHT */
 .nav-right {
-  flex: 1;
-  text-align: right;
+  margin-left: auto;
 }
 
-.logo {
-  height: 40px;
-  margin-right: 0.5rem;
+/* ===== HAMBURGER ===== */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  margin-left: 1rem;
+  z-index: 1100;
 }
 
-.logo-name {
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-  text-decoration: none;
+.bar {
+  width: 26px;
+  height: 3px;
+  background: white;
+  margin: 4px 0;
+  transition: 0.4s;
 }
 
-.site-name {
-  font-size: 1.3rem;
-  color: white;
+.hamburger.open .bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.open .bar:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.open .bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 
-.login-link {
-  background: linear-gradient(to right, orange, purple);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  transition: all 0.4s ease;
-  font-weight: bold;
-  color: white;
-  text-decoration: none;
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  /* Hide center menu by default */
+  .nav-center {
+    display: none;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: #111;
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem 0;
+    gap: 1.4rem;
+    border-bottom: 1px solid #222;
+  }
+
+  /* When open */
+  .nav-center.open {
+    display: flex;
+  }
+
+  /* Center items perfectly */
+  .nav-center a {
+    font-size: 1.2rem;
+    padding: 0.6rem;
+  }
+
+  /* Show hamburger ONLY on mobile */
+  .hamburger {
+    display: flex;
+  }
+
+  /* Hide original inline buttons except login */
+  .nav-center {
+    flex: none;
+  }
 }
 
-.login-link:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+/* ===== DESKTOP ===== */
+@media (min-width: 769px) {
+  .nav-center {
+    display: flex;
+  }
+
+  .hamburger {
+    display: none;
+  }
 }

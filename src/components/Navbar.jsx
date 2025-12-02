@@ -1,29 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/navbar.css';
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
+  const closeMenu = () => setIsOpen(false);
+
   return (
     <div className="navbar">
+      {/* LEFT */}
       <div className="nav-left">
-        <Link to="/" className="logo-name">
+        <Link to="/" className="logo-name" onClick={closeMenu}>
           <img src="/images/jplogo.png" alt="Logo" className="logo" />
           <span className="site-name">Journey Planner</span>
         </Link>
       </div>
 
-      <div className="nav-center">
-        <Link to="/">Home</Link>
-        <Link to="/contact">Contact Us</Link>
-        <Link to="/about">About</Link>
-        <Link to="/faq">FAQ</Link>
-      </div>
-
+      {/* LOGIN ALWAYS OUTSIDE */}
       <div className="nav-right">
-        {}
-        <Link to="/login" className="login-link">
+        <Link to="/login" className="login-link" onClick={closeMenu}>
           Login
         </Link>
+      </div>
+
+      {/* HAMBURGER */}
+      <div className={`hamburger ${isOpen ? "open" : ""}`} onClick={toggleMenu}>
+        <span className="bar"></span>
+        <span className="bar"></span>
+        <span className="bar"></span>
+      </div>
+
+      {/* DROPDOWN LINKS */}
+      <div className={`nav-center ${isOpen ? "open" : ""}`}>
+        <Link to="/" onClick={closeMenu}>Home</Link>
+        <Link to="/contact" onClick={closeMenu}>Contact Us</Link>
+        <Link to="/about" onClick={closeMenu}>About</Link>
+        <Link to="/faq" onClick={closeMenu}>FAQ</Link>
       </div>
     </div>
   );
