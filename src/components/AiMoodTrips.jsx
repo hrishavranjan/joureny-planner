@@ -4,11 +4,12 @@ import axios from 'axios';
 import { UserContext } from '../context/UserContext';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ReactCountryFlag from 'react-country-flag';
 
 const BRAND_NAME = 'Journey-Planner';
 const BRAND_EMAIL = 'hrishavranjan2003@gmail.com';
 
-const API_BASE = 'https://journey-planner-backend.onrender.com';
+const API_BASE = 'http://localhost:4000';
 
 // World country list
 const WORLD_COUNTRIES = [
@@ -52,7 +53,7 @@ const INDIA_STATES = [
   'Lakshadweep', 'Puducherry'
 ];
 
-// Simple country → flag (fallback 🌍)
+// Simple country → emoji flag (for <select> labels)
 const COUNTRY_FLAGS = {
   India: '🇮🇳',
   'United States': '🇺🇸',
@@ -79,7 +80,48 @@ const COUNTRY_FLAGS = {
   Sweden: '🇸🇪'
 };
 
-const getFlag = (country) => COUNTRY_FLAGS[country] || '🌍';
+const getFlagEmoji = (country) => COUNTRY_FLAGS[country] || '🌍';
+
+// Mapping for library-based flags (for cards)
+const COUNTRY_CODE_MAP = {
+  India: 'IN',
+  'United States': 'US',
+  'United Kingdom': 'GB',
+  Canada: 'CA',
+  Australia: 'AU',
+  Germany: 'DE',
+  France: 'FR',
+  Italy: 'IT',
+  Spain: 'ES',
+  Portugal: 'PT',
+  Brazil: 'BR',
+  Mexico: 'MX',
+  Japan: 'JP',
+  China: 'CN',
+  'South Korea': 'KR',
+  Russia: 'RU',
+  'Sri Lanka': 'LK',
+  Nepal: 'NP',
+  'United Arab Emirates': 'AE',
+  Singapore: 'SG',
+  Switzerland: 'CH',
+  Netherlands: 'NL',
+  Sweden: 'SE'
+};
+
+const CountryFlagIcon = ({ country }) => {
+  const code = COUNTRY_CODE_MAP[country];
+  if (!code) {
+    return <span>{getFlagEmoji(country)}</span>;
+  }
+  return (
+    <ReactCountryFlag
+      countryCode={code}
+      svg
+      aria-label={country}
+    />
+  );
+};
 
 // Saved structure in localStorage: { map: {key: true}, trips: [trip,...] }
 const STORAGE_KEY = 'jp_saved_ai_trips';
@@ -94,7 +136,6 @@ const AiMoodTrips = () => {
     budget: '',
     travelers: 1,
     useAiPlaces: false,
-    useTrain: false,
     useLocalRecommendations: true
   });
   const [tripData, setTripData] = useState([]);
@@ -105,7 +146,6 @@ const AiMoodTrips = () => {
 
   const [visibleCount, setVisibleCount] = useState(10);
   const [loading, setLoading] = useState(false);
-  const [enriching, setEnriching] = useState(false);
   const [savedMap, setSavedMap] = useState({});
 
   const loadSavedFromStorage = () => {
@@ -162,6 +202,21 @@ const AiMoodTrips = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    if (type === 'checkbox') {
+      const labelMap = {
+        useAiPlaces: '🤖 AI Places Suggestions',
+        useLocalRecommendations: '📚 Journey-Planner Recommendations'
+      };
+      const label = labelMap[name] || 'Option';
+      toast.info(
+        `${checked ? '✅ Enabled' : '❌ Disabled'} ${label}`,
+        {
+          position: 'top-center'
+        }
+      );
+    }
+
     setForm((prev) => {
       const next = { ...prev, [name]: type === 'checkbox' ? checked : value };
 
@@ -185,22 +240,6 @@ const AiMoodTrips = () => {
           next.state = '';
           setStatesForCountry(Array.from(new Set(countryStates)).sort());
         }
-      }
-
-      if (type === 'checkbox') {
-        const labelMap = {
-          useAiPlaces: '🤖 AI Places Suggestions',
-          useTrain: '🚆 Train details',
-          useLocalRecommendations: '📚 Journey-Planner Recommendations'
-        };
-        const label = labelMap[name] || 'Option';
-        toast.info(
-          `${checked ? '✅ Enabled' : '❌ Disabled'} ${label}`,
-          {
-            position: 'top-center',
-            autoClose: 2000
-          }
-        );
       }
 
       return next;
@@ -288,12 +327,6 @@ const AiMoodTrips = () => {
       );
     }
 
-    if (trip.train) {
-      lines.push(
-        `🚆 Train (total for all travellers, approx.): ₹${trip.train.price} ${trip.train.currency}`
-      );
-    }
-
     lines.push('');
     lines.push(`Shared via ${BRAND_NAME}`);
     lines.push(`📧 Contact: ${BRAND_EMAIL}`);
@@ -313,8 +346,7 @@ const AiMoodTrips = () => {
       } else if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(shareText);
         toast.success('📋 Trip card copied. You can paste and share anywhere.', {
-          position: 'top-center',
-          autoClose: 3000
+          position: 'top-center'
         });
       } else {
         window.location.href = `mailto:?subject=${encodeURIComponent(
@@ -324,8 +356,7 @@ const AiMoodTrips = () => {
     } catch (err) {
       console.error('Share failed:', err);
       toast.error('⚠️ Unable to share card. Try copying manually.', {
-        position: 'top-center',
-        autoClose: 3000
+        position: 'top-center'
       });
     }
   };
@@ -353,8 +384,7 @@ const AiMoodTrips = () => {
       delete nextMap[key];
       nextTrips = nextTrips.filter((t) => getDestKey(t) !== key);
       toast.info('🗑️ Removed from saved trips.', {
-        position: 'top-center',
-        autoClose: 3000
+        position: 'top-center'
       });
     } else {
       nextMap[key] = true;
@@ -363,8 +393,7 @@ const AiMoodTrips = () => {
         savedAt: new Date().toISOString()
       });
       toast.success('⭐ Trip saved to your Saved Trips page!', {
-        position: 'top-center',
-        autoClose: 3000
+        position: 'top-center'
       });
     }
 
@@ -372,19 +401,20 @@ const AiMoodTrips = () => {
     setSavedMap(nextMap);
   };
 
+  const rawTravelers = parseInt(form.travelers, 10) || 1;
+  const effectiveTravelers =
+    form.mood === 'Honeymoon' ? rawTravelers * 2 : rawTravelers;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     toast.info('🔍 Searching for the best trips for you...', {
-      position: 'top-center',
-      autoClose: 5000
+      position: 'top-center'
     });
 
     setLoading(true);
     setSuggestions([]);
 
-    const rawTravelers = parseInt(form.travelers, 10) || 1;
-    const travelers =
-      form.mood === 'Honeymoon' ? rawTravelers * 2 : rawTravelers;
+    const travelers = effectiveTravelers;
     const totalBudget = parseFloat(form.budget) || 0;
 
     let localResults = [];
@@ -441,53 +471,10 @@ const AiMoodTrips = () => {
           breakdown: s.breakdown || null,
           source: 'api'
         }));
-
-        if (form.useTrain && apiResults.length > 0) {
-          setEnriching(true);
-          try {
-            const destinations = apiResults
-              .map((x) => x.destination)
-              .filter(Boolean);
-            const pricingResp = await axios.post(
-              `${API_BASE}/api/live-pricing-batch`,
-              {
-                destinations,
-                travelers,
-                includeTrain: true,
-                country: form.country
-              }
-            );
-
-            const meta = pricingResp.data && pricingResp.data.__meta;
-            if (form.country === 'India' && meta && meta.trainRedirect) {
-              toast.info(
-                '🚆 Issue fetching live train details. Redirecting to IRCTC for best results.',
-                { position: 'top-center', autoClose: 5000 }
-              );
-              window.open(
-                'https://www.irctc.co.in/nget/train-search',
-                '_blank',
-                'noopener'
-              );
-            }
-
-            apiResults = apiResults.map((item) => {
-              const extra = pricingResp.data?.[item.destination] || {};
-              return {
-                ...item,
-                train: extra.train || null
-              };
-            });
-          } catch (err) {
-            console.warn('Train enrichment failed', err);
-          }
-          setEnriching(false);
-        }
       } catch (err) {
         console.error('Gemini backend call failed:', err);
         toast.error('⚠️ AI suggestions failed. Showing Our Official Database.', {
-          position: 'top-center',
-          autoClose: 5000
+          position: 'top-center'
         });
       }
     }
@@ -516,13 +503,12 @@ const AiMoodTrips = () => {
 
     if (finalSuggestions.length === 0) {
       toast.error('🚫 No trips available within this budget or filters.', {
-        position: 'top-center',
-        autoClose: 5000
+        position: 'top-center'
       });
     } else {
       toast.success(
         `🎉 ${finalSuggestions.length} suggestion(s) found. Scroll to see the cards.`,
-        { position: 'top-center', autoClose: 5000 }
+        { position: 'top-center' }
       );
     }
 
@@ -535,15 +521,13 @@ const AiMoodTrips = () => {
     if (!form.useAiPlaces) {
       setVisibleCount((prev) => prev + 5);
       toast.info('🔁 Showing 5 more Results.....', {
-        position: 'top-center',
-        autoClose: 2000
+        position: 'top-center'
       });
       return;
     }
 
     toast.info('✨ Fetching more unique places...', {
-      position: 'top-center',
-      autoClose: 2000
+      position: 'top-center'
     });
 
     const existingKeys = suggestions
@@ -601,27 +585,20 @@ const AiMoodTrips = () => {
 
       if (newItems.length === 0) {
         toast.warning('😅 No more unique destinations found right now.', {
-          position: 'top-center',
-          autoClose: 3000
+          position: 'top-center'
         });
       } else {
         toast.success(`🎉 Added ${newItems.length} more result(s)!`, {
-          position: 'top-center',
-          autoClose: 2000
+          position: 'top-center'
         });
       }
     } catch (err) {
       console.error(err);
       toast.error('⚠️ Failed fetching extra results.', {
-        position: 'top-center',
-        autoClose: 3000
+        position: 'top-center'
       });
     }
   };
-
-  const rawTravelers = parseInt(form.travelers, 10) || 1;
-  const effectiveTravelers =
-    form.mood === 'Honeymoon' ? rawTravelers * 2 : rawTravelers;
 
   const filteredCountries = countries.filter((c) =>
     c.toLowerCase().includes(countrySearch.toLowerCase())
@@ -688,7 +665,7 @@ const AiMoodTrips = () => {
             <option value="">-- Select Country --</option>
             {filteredCountries.map((c, i) => (
               <option key={i} value={c}>
-                {getFlag(c)} {c}
+                {getFlagEmoji(c)} {c}
               </option>
             ))}
           </select>
@@ -766,42 +743,27 @@ const AiMoodTrips = () => {
             <label>
               <input
                 type="checkbox"
-                name="useTrain"
-                checked={form.useTrain}
-                onChange={handleChange}
-                disabled={!form.useAiPlaces}
-              />
-              2️⃣ 🚆 Train details (India only)
-            </label>
-          </div>
-
-          <div className="form-group checkbox">
-            <label>
-              <input
-                type="checkbox"
                 name="useLocalRecommendations"
                 checked={form.useLocalRecommendations}
                 onChange={handleChange}
               />
-              3️⃣ 📚 Journey-Planner Recommendations
+              2️⃣ 📚 Journey-Planner Recommendations
             </label>
           </div>
         </fieldset>
 
-        <button type="submit" disabled={loading || enriching}>
+        <button type="submit" disabled={loading}>
           ✨ Suggest Places
         </button>
       </form>
 
       {loading && <p>⏳ Loading suggestions...</p>}
-      {enriching && <p>🚆 Adding train details...</p>}
 
       {suggestions.length > 0 && (
         <div className="results">
           <h2>📌 Suggestions</h2>
           {suggestions.slice(0, visibleCount).map((trip, i) => {
             const countryForFlag = trip.Country || form.country || 'World';
-            const flag = getFlag(countryForFlag);
             const { city, state } = extractCityState(trip);
             const bd = trip.breakdown || {};
             const perPerson = bd.totalPerPerson || trip.approxBaseCost || 0;
@@ -815,7 +777,7 @@ const AiMoodTrips = () => {
                 <div className="trip-card-header">
                   <div className="trip-location-line">
                     <span className="trip-country">
-                      {flag} {countryForFlag}
+                      <CountryFlagIcon country={countryForFlag} /> {countryForFlag}
                     </span>
                   </div>
                   <span className="trip-card-source">
@@ -892,16 +854,6 @@ const AiMoodTrips = () => {
                   </p>
                 </div>
 
-                {trip.train && form.country === 'India' && (
-                  <p className="train-line">
-                    <strong>🚆 Train (India, approx.):</strong>{' '}
-                    ₹{trip.train.price} {trip.train.currency}{' '}
-                    <span className="train-note">
-                      (total for all travellers)
-                    </span>
-                  </p>
-                )}
-
                 {trip.tags && trip.tags.length > 0 && (
                   <p className="tags-line">
                     <strong>🏷️ Tags:</strong> {trip.tags.join(', ')}
@@ -939,17 +891,17 @@ const AiMoodTrips = () => {
           <button onClick={handleShowMore}>
             🔁 Show more results
           </button>
-
         </div>
       )}
 
       <ToastContainer
         position="top-center"
-        autoClose={5000}
-        hideProgressBar
+        autoClose={3000}
+        hideProgressBar={false}
         newestOnTop
         closeOnClick
         pauseOnHover={false}
+        pauseOnFocusLoss={false}
         draggable={false}
       />
     </div>
