@@ -9,7 +9,10 @@ import ReactCountryFlag from 'react-country-flag';
 const BRAND_NAME = 'Journey-Planner';
 const BRAND_EMAIL = 'hrishavranjan2003@gmail.com';
 
-const API_BASE = 'http://localhost:4000';
+const API_BASE =
+  import.meta.env.PROD
+    ? "https://joureny-planner-backend.onrender.com"
+    : "http://localhost:4000";
 
 // World country list
 const WORLD_COUNTRIES = [
