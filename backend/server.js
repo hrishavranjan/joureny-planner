@@ -16,8 +16,10 @@ const GEMINI_API_KEY =
   'AIzaSyCFcm1tHnx7QSKbnIIWgrCuUJCuMwOFMbE';
 
 const MODEL_NAME = process.env.MODEL_NAME || 'gemini-2.5-flash';
-const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
-const GEMINI_ENDPOINT = `${GEMINI_BASE}/${MODEL_NAME}:generateContent`;
+
+// Official REST pattern:
+// https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key=API_KEY
+const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${GEMINI_API_KEY}`;
 
 // =============================
 //  🔑 AMADEUS CONFIG (Flights/Hotels - used only for cityCode)
@@ -314,12 +316,12 @@ Rules:
     let suggestions = [];
 
     try {
+      console.log('Using Gemini model:', MODEL_NAME);
       console.log('Calling Gemini endpoint:', GEMINI_ENDPOINT);
 
       const upstreamResp = await axios.post(GEMINI_ENDPOINT, body, {
         headers: {
-          'Content-Type': 'application/json',
-          'x-goog-api-key': GEMINI_API_KEY
+          'Content-Type': 'application/json'
         },
         timeout: 60000
       });
