@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css/NavigationBar.css';
 import { auth } from '../firebase';
@@ -10,9 +10,7 @@ const ADMIN_EMAIL = 'hrishavranjan2003@gmail.com';
 const NavigationBar = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const [showDropdown, setShowDropdown] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const dropdownRef = useRef();
   const [modal, setModal] = useState({ visible: false, type: '', message: '' });
 
   const toggleModal = (type, message) => {
@@ -20,9 +18,10 @@ const NavigationBar = () => {
   };
 
   const handleModalConfirm = async () => {
-    setModal({ ...modal, visible: false });
+    const currentType = modal.type;
+    setModal((prev) => ({ ...prev, visible: false }));
 
-    if (modal.type === 'logout') {
+    if (currentType === 'logout') {
       try {
         await auth.signOut();
         toast.success('🚪 Logged out successfully!');
@@ -30,13 +29,13 @@ const NavigationBar = () => {
       } catch (error) {
         toast.error('❌ Logout failed');
       }
-    } else if (modal.type === 'reset') {
+    } else if (currentType === 'reset') {
       if (user?.email) {
         try {
-          await auth.sendPasswordResetEmail(auth, user.email);
+          await auth.sendPasswordResetEmail(user.email);
           toast.success('📬 Password reset email sent!');
         } catch (err) {
-          toast.error('❌ Failed to send reset email');
+          toast.error('Logout Then click to forget password to reset it.');
         }
       } else {
         toast.error('⚠️ No user email found. Please re-login.');
@@ -48,34 +47,40 @@ const NavigationBar = () => {
     setModal({ visible: false, type: '', message: '' });
   };
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setShowDropdown(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   return (
     <>
       <nav className="navbar">
-        <Link to="/admin-feed" className="nav-left logo-name" onClick={() => setMenuOpen(false)}>
-  <img src="/images/jplogo.png" alt="Journey Planner Logo" className="logo" />
-  <span className="site-name">Journey Planner</span>
-</Link>
+        <Link
+          to="/admin-feed"
+          className="nav-left logo-name"
+          onClick={() => setMenuOpen(false)}
+        >
+          <img
+            src="/images/jplogo.png"
+            alt="Journey Planner Logo"
+            className="logo"
+          />
+          <span className="site-name">Journey Planner</span>
+        </Link>
 
-
-        <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+        <div className="hamburger" onClick={() => setMenuOpen((prev) => !prev)}>
           {menuOpen ? '✖' : '☰'}
         </div>
 
         <div className={`nav-menu ${menuOpen ? 'open' : ''}`}>
-          <div className="nav-center">
-            <Link to="/admin-feed" onClick={() => setMenuOpen(false)}>📢 Admin Updates</Link>
-            <Link to="/dashboard" onClick={() => setMenuOpen(false)}>📋 Journey Manager</Link>
-            <Link to="/ai-trips" onClick={() => setMenuOpen(false)}>🤖 AI Mood Trips</Link>
+          <div className="hamburger-menu-list">
+            <Link to="/admin-feed" onClick={() => setMenuOpen(false)}>
+              📢 Admin Updates
+            </Link>
+
+            <Link to="/dashboard" onClick={() => setMenuOpen(false)}>
+              📋 Journey Manager
+            </Link>
+
+            <Link to="/ai-trips" onClick={() => setMenuOpen(false)}>
+              🤖 AI Mood Trips
+            </Link>
+
             {user?.email === ADMIN_EMAIL && (
               <Link
                 to="/admin-panel"
@@ -85,34 +90,30 @@ const NavigationBar = () => {
                 📝 Create Post
               </Link>
             )}
-          </div>
 
-          <div className="nav-right" ref={dropdownRef}>
-            {user ? (
-              <div className="profile-dropdown" onClick={() => setShowDropdown((prev) => !prev)}>
-                <span className="profile-toggle">
-                  👤 {user.displayName || user.email || 'Profile'} ▾
-                </span>
-                <ul className={`dropdown-content ${showDropdown ? 'show' : ''}`}>
-                  <li><Link to="/profile">👥 View Profile</Link></li>
-                  <li>
-                    <button onClick={() => toggleModal('reset', 'Send password reset email?')}>
-                      🔁 Reset Account
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => toggleModal('logout', 'Are you sure you want to logout?')}
-                      className="logout-btn"
-                    >
-                      🚪 Logout
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            ) : (
-              <span style={{ color: 'white' }}>Loading...</span>
-            )}
+            <hr className="menu-separator" />
+
+            <Link to="/profile" onClick={() => setMenuOpen(false)}>
+              👥 {(user?.displayName || user?.email || 'User')} (View Profile)
+            </Link>
+
+            <button
+              className="menu-button"
+              onClick={() =>
+                toggleModal('reset', 'Send password reset email?')
+              }
+            >
+              🔁 Reset Account
+            </button>
+
+            <button
+              className="menu-button logout-btn"
+              onClick={() =>
+                toggleModal('logout', 'Are you sure you want to logout?')
+              }
+            >
+              🚪 Logout
+            </button>
           </div>
         </div>
       </nav>
@@ -122,8 +123,12 @@ const NavigationBar = () => {
           <div className="modal-box">
             <p>{modal.message}</p>
             <div className="modal-buttons">
-              <button className="confirm" onClick={handleModalConfirm}>✅ Yes</button>
-              <button className="cancel" onClick={handleModalCancel}>❌ Cancel</button>
+              <button className="confirm" onClick={handleModalConfirm}>
+                ✅ Yes
+              </button>
+              <button className="cancel" onClick={handleModalCancel}>
+                ❌ Cancel
+              </button>
             </div>
           </div>
         </div>
